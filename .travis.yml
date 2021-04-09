@@ -3,19 +3,17 @@ services:
     - docker
 
 before_install:
-    - docker build -t awiegers/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t awiegers/react-test -f ./client/Dockerfile.dev ./client
 
-    script:
-      - docker run -e CI=true awiegers/react-test npm test
+script:
+  - docker run -e CI=true awiegers/react-test npm test
 
 after_success:
   - docker build -t awiegers/multi-client ./client
   - docker build -t awiegers/multi-nginx ./nginx
   - docker build -t awiegers/multi-server ./server
   - docker build -t awiegers/multi-worker ./worker
-  # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  # Take those images and push them to docker hub
   - docker push awiegers/multi-client
   - docker push awiegers/multi-nginx
   - docker push awiegers/multi-server

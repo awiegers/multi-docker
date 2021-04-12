@@ -1,0 +1,35 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "name": "client",
+            "image": "awiegers/multi-client",
+            "hostname": "client",
+            "essential": false
+        },
+        {
+            "name": "ngnix",
+            "image": "awiegers/multi-ngnix",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 80
+                }
+            ],
+            "links": ["client", "server"]
+        },
+        {
+            "name": "server",
+            "image": "awiegers/multi-server",
+            "hostname": "api",
+            "essential": false
+        },
+        {
+            "name": "worker",
+            "image": "awiegers/multi-worker",
+            "hostname": "worker",
+            "essential": false
+        }
+    ]
+}
